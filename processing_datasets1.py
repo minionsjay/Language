@@ -15,6 +15,11 @@ API_KEY = "sk-44ef59c0fe4e47e992fb4e4d985efe3f"
 Qianwen_api_key="sk-35805b6e284846f691c01e1b4caf4759"
 Qianwen_base_url="https://dashscope.aliyuncs.com/compatible-mode/v1"
 Qianwen_model="qwen-plus-2025-07-28"
+
+Xiaomi_api_key="sk-c4s1udb9y702t14eb05ijwfcurjfstaqlywlioxoo1rpp6ua"
+Xiaomi_base_url="https://api.xiaomimimo.com/v1"
+Xiaomi_model="mimo-v2-flash"
+
 # 【修改点 1】切换为 deepseek-chat
 MODEL_NAME = "deepseek-chat" 
 
@@ -30,7 +35,7 @@ EXPECTED_KEYS = [
     "Violence_Incitement", "Dangerous_Ideology", "Profanity_Slang"
 ]
 
-client = AsyncOpenAI(api_key=API_KEY, base_url=API_BASE_URL)
+client = AsyncOpenAI(api_key=Xiaomi_api_key, base_url=Xiaomi_base_url)
 semaphore = asyncio.Semaphore(CONCURRENCY_LIMIT)
 
 # ==========================================
@@ -77,7 +82,7 @@ async def annotate_single_text(text: str, index: int) -> dict:
     async with semaphore:
         try:
             response = await client.chat.completions.create(
-                model=MODEL_NAME,
+                model=Xiaomi_model,
                 messages=[
                     {"role": "system", "content": SYSTEM_PROMPT},
                     {"role": "user", "content": f"输入文本：{text}"}
@@ -155,7 +160,7 @@ def save_batch_to_disk(results, df):
 # 5. 主控流与微批次调度引擎
 # ==========================================
 async def main():
-    print(f"🚀 启动多任务自动流水线 (基于 {MODEL_NAME})...")
+    print(f"🚀 启动多任务自动流水线 (基于 {Xiaomi_model})...")
     
     # --- 1. 数据加载 ---
     if not os.path.exists(INPUT_CSV):
